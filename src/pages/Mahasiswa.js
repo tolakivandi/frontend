@@ -30,6 +30,7 @@ function Mahasiswa() {
       const response2 = await axios.get("http://localhost:3000/api/jurusan");
       const data2 = await response2.data.data;
       setJrsn(data2);
+      console.log(response2);
     } catch (error) {
       console.error("Kesalahan: ", error);
     }
@@ -75,11 +76,16 @@ function Mahasiswa() {
     formData.append("swa_foto", swa_foto);
 
     try {
-      await axios.post("http://localhost:3000/api/mhs/store", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:3000/api/mhs/store",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response);
       navigate("/mhs");
       fectData();
     } catch (error) {
@@ -158,11 +164,17 @@ function Mahasiswa() {
               <label className="form-label">Jurusan:</label>
               <select
                 className="form-select"
-                value={id_jurusan}
-                onChange={handleIdJurusanChange}
+                onChange={(e) => {
+                  setIdJurusan(e.target.value);
+                  console.log(id_jurusan);
+                }}
+                defaultValue={""}
               >
-                {jrs.map((jr) => (
-                  <option key={jr.id_j} value={jr.id_j}>
+                <option value={""} selected={true}>
+                  Select Jurusan
+                </option>
+                {jrs.map((jr, idx) => (
+                  <option key={idx} value={jr.id_j}>
                     {jr.nama_jurusan}
                   </option>
                 ))}
