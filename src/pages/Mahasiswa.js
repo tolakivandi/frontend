@@ -96,7 +96,7 @@ function Mahasiswa() {
   };
 
   const [editData, setEditData] = useState({
-    id: null,
+    id_m: null,
     nama: "",
     nrp: "",
     id_jurusan: "",
@@ -126,7 +126,7 @@ function Mahasiswa() {
     e.preventDefault();
     const formData = new FormData();
 
-    formData.append("id_m", editData.id_Maha);
+    formData.append("id_m", editData.id_m);
     formData.append("nama", editData.nama);
     formData.append("nrp", editData.nrp);
     formData.append("id_jurusan", editData.id_jurusan);
@@ -157,6 +157,23 @@ function Mahasiswa() {
     }
   };
 
+  const handleDelete = (id_m) => {
+    axios
+      .delete(`http://localhost:3000/api/mhs/delete/${id_m}`)
+      .then((response) => {
+        console.log("Data Berhasil Dihapus");
+
+        const updateMhs = mhs.filter((item) => item.id_m !== id_m);
+        setMhs(updateMhs);
+      })
+      .catch((error) => {
+        console.error("Gagal menghapus data", error);
+        alert(
+          "Gagal menghapus data. silahkan coba lagi atau hubungi administrator"
+        );
+      });
+  };
+
   return (
     <Container>
       <Row>
@@ -174,6 +191,9 @@ function Mahasiswa() {
               <th scope="col">Jurusan</th>
               <th scope="col">gambar</th>
               <th scope="col">swa_foto</th>
+              <th scope="col" colSpan={2}>
+                Action
+              </th>
             </tr>
           </thead>
 
@@ -197,6 +217,15 @@ function Mahasiswa() {
                   >
                     {" "}
                     Edit{" "}
+                  </button>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleDelete(mh.id_m)}
+                    className="btn btn-sm btn-danger"
+                  >
+                    {" "}
+                    Hapus{" "}
                   </button>
                 </td>
               </tr>
